@@ -1,0 +1,47 @@
+#highscore {
+	width: 100%;
+}
+
+.level {
+	min-height: initial;
+	cursor: pointer;
+}
+
+.level-more-button {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+}
+
+.level-overview-table, .level-detail-table {
+	margin: auto;
+	margin-bottom: 13px;
+}
+
+.level-detail-table th {
+	cursor: pointer;
+}
+
+.level-detail-table th i {
+	font-size: 14pt;
+}
+
+.level .mdl-card__supporting-text {
+	width: initial;
+}
+
+#level-footer, #level-header{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width:100%;
+}
+
+.level-next-button, .level-prev-button {
+	margin: 3px;
+}
+
+.level-back-button {
+	margin: auto;
+	margin-right: 10px;
+}

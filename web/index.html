@@ -1,0 +1,144 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>YouTube Deutschland Map</title>
+    <script src="https://cdn.bootcss.com/sigma.js/1.1.0/sigma.min.js"></script>
+    <script src="https://cdn.bootcss.com/sigma.js/1.1.0/plugins/sigma.parsers.gexf.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"/>
+</head>
+
+
+<body>
+<div id="sidebar">
+    <div id="header"><h1>Die inoffizielle YouTube Deutschland Map</h1></div>
+    <div class="description">
+        <i class="fa fa-close close" onclick="$('.description').hide()"></i>
+        Der nebenstehende Graph soll YouTube Deutschland darstellen, wobei jeder Knoten für einen Kanal mit min. 200.000
+        Abonnenten steht. Die Stärke der Verbindungen zwischen den Knoten und somit auch die Anordnung der Knotent
+        stellt die Ähnlichkeit der jeweiligen Communities dar. Dies wird über die Anzahl der Zuschauer berechnet die bei
+        beiden Kanälen min. einen Kommentar hinterlassen haben.
+    </div>
+</div>
+<div id="sigma-container"></div>
+<div id="detail" style="display: none">
+    <i class="fa fa-close close" onclick="$('#detail').hide()"></i>
+    <h2></h2>
+    <span>Größten Community Überschneidungen:</span>
+    <ul>
+
+    </ul>
+    <a target="_blank">Zu Channel gehen...</a>
+</div>
+<div id="legend">
+    <h2>Kategorien:</h2>
+    <ul>
+        <li><i class="fa fa-square" id="gaming"></i> Gaming</li>
+        <li><i class="fa fa-square" id="lifestyle"></i> Lifestyle</li>
+        <li><i class="fa fa-square" id="music"></i> Musik</li>
+        <li><i class="fa fa-square" id="entertainment"></i> Entertainment</li>
+        <li><i class="fa fa-square" id="sports"></i> Sport</li>
+        <li><i class="fa fa-square" id="movies"></i> Film</li>
+        <li><i class="fa fa-square" id="None"></i> Keine</li>
+        <li><i class="fa fa-square" id="other"></i> Sonstiges</li>
+    </ul>
+</div>
+<div id="footer">
+    <h2 onclick="$('#details').toggle()">Impressum</h2>
+    <div id="details">
+        Erstellt von<br>
+        <span class="indent"><a href="https://dw-projects.com/index.php?id=42" target="_blank">Dominik Winkelbauer</a></span><br>
+        <br>
+        Inspiriert von<br>
+        <span class="indent"><a href="http://www.dkriesel.com/spiegelmining" target="_blank">Daniel Kriesel (SpiegelMining)</a></span>
+        <br>
+        <br>
+        <span class="note">
+          Dies ist keine offizielle Seite von YouTube Deutschland. Der Graph wurde komplett aus öffentlich zugänglichen Informationen generiert. Alle Angaben sind ohne Gewähr.
+        </span>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+<script>
+    sigma.classes.graph.addMethod('getOverlaps', function(node) {
+        result = [];
+        if (node.id in this.outNeighborsIndex)
+        {
+            graph = this;
+            $.each(this.outNeighborsIndex[node.id], function(nodeId, edges) {
+                edge = edges[Object.keys(edges)[0]];
+                overlaps = 2 * edge.size / (1.0 / parseInt(graph.nodes(nodeId).attributes.users) + 1.0 / parseInt(node.attributes.users));
+                result.push({node: graph.nodes(nodeId), overlap: edge.size});
+            });
+        }
+
+        result.sort(function(a,b) {return (a.overlap < b.overlap) ? 1 : ((b.overlap < a.overlap) ? -1 : 0);} );
+        return result;
+    });
+
+
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        renderer = 'webgl';
+    } else {
+        renderer = 'canvas';
+    }
+
+    sigma.parsers.gexf(
+        'youtubemap.gexf',
+        { // Here is the ID of the DOM element that
+            // will contain the graph:
+            renderer: {
+                container: document.getElementById('sigma-container'),
+                type: renderer
+            },
+            settings: {
+                defaultLabelColor: "#222",
+                defaultLabelSize: 14,
+                defaultLabelBGColor: "#ddd",
+                defaultHoverLabelBGColor: "#002147",
+                defaultLabelHoverColor: "#fff",
+                labelThreshold: 5.7,
+                defaultEdgeType: "curve",
+                hoverFontStyle: "bold",
+                fontStyle: 400,
+                font: "Roboto",
+                activeFontStyle: "bold",
+            }
+        },
+        function (s) {
+
+
+            s.bind("clickNode", function (e) {
+                $detail = $('#detail');
+                $detail.find('h2').text(e.data.node.label);
+                overlaps = s.graph.getOverlaps(e.data.node);
+
+                $detail.find('ul').empty();
+
+                $.each(overlaps, function(key, entry) {
+                    $detail.find('ul').append('<li>' + entry.overlap.toFixed(2) + '% - ' + entry.node.label);
+                });
+
+                $detail.find('a').attr('href', 'https://www.youtube.com/channel/' + e.data.node.attributes.identifier);
+
+                $detail.show();
+            });
+
+
+            var edges = s.graph.edges();
+
+            //Using for loop
+            for (var i = 0; i < edges.length; i += 1) {
+                edges[i].color = '#aaa';
+            }
+
+            s.refresh();
+        }
+    );
+</script>
+</body>
+</html>

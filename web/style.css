@@ -1,0 +1,161 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    background: #eee;
+    font-size: 14px;
+}
+
+.close {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+#sidebar {
+    left: 10px;
+    top: 10px;
+    position: absolute;
+    z-index: 100;
+}
+
+#sidebar > div, #footer, #legend, #detail {
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 1px #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    background: white;
+    z-index: 100;
+    position: relative;
+}
+
+#sidebar > div {
+    width: 374px;
+}
+
+#legend {
+    width: auto;
+    display: inline-block;
+    right: 10px;
+    top: 10px;
+    position: absolute;
+}
+
+#legend h2, #detail h2 {
+    margin-top: 0;
+    font-size: 16px;
+}
+
+#legend ul, #detail ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+#legend ul > li, #detail ul > li  {
+    margin-top: 5px;
+}
+
+
+#detail {
+    width: auto;
+    display: inline-block;
+    left: 10px;
+    bottom: 10px;
+    position: absolute;
+}
+
+#detail a {
+    margin-top: 10px;
+    display: block;
+}
+
+#header h1 {
+    font-weight: bold;
+    font-size: 20px;
+    margin: 0;
+}
+
+
+#footer {
+    right: 10px;
+    bottom: 10px;
+    max-width: 300px;
+    position: absolute;
+}
+
+#footer h2 {
+    font-weight: bold;
+    font-size: 16px;
+    margin: 0;
+    cursor: pointer;
+}
+
+#footer #details {
+    display:none;
+    margin-top: 10px;
+}
+
+#footer #details .indent {
+    padding-left: 20px;
+    padding-top: 10px;
+}
+
+#footer #details .note {
+    font-size: 10px;
+}
+
+#legend #gaming {
+    color: rgb(0, 2, 189);
+}
+#legend #lifestyle {
+    color: rgb(255, 36, 167);
+}
+#legend #music {
+    color: rgb(89, 191, 66);
+}
+#legend #entertainment {
+    color: rgb(255, 94, 15);
+}
+#legend #sports {
+    color: rgb(173, 78, 0);
+}
+#legend #movies {
+    color: rgb(204, 12, 0);
+}
+#legend #none {
+    color: rgb(126, 147, 33);
+}
+#legend #other {
+    color: rgb(192, 192, 192);
+}
+
+#sigma-container {
+    height: 100%;
+}
+
+
+@media(max-width: 768px) {
+    #sidebar, #footer, #legend  {
+        position: static;
+    }
+
+    #sidebar > div {
+        width: auto;
+    }
+
+    #sigma-container {
+        height: 400px;
+        display: block;
+    }
+
+    #legend, #footer {
+        display: block;
+        max-width: none;
+    }
+
+    #footer #details {
+        display: block;
+    }
+}
